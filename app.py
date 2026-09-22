@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
+from fastapi.middleware.cors import CORSMiddleware
+
 
 app = FastAPI(
     title="AI Support Ticket Intelligence Platform",
@@ -8,6 +10,13 @@ app = FastAPI(
     version="1.0.0"
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origin_regex=r"(http://localhost|http://127\.0\.0\.1):\d+|https://.*\.vercel\.app",
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 model = joblib.load("ticket_type_model.pkl")
 tfidf = joblib.load("ticket_type_tfidf.pkl")
 
