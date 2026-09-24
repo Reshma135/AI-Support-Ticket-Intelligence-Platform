@@ -774,59 +774,230 @@ function ContactPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState("idle");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setSent(true);
+
+    if (!name.trim() || !email.trim() || !message.trim()) return;
+
+    setStatus("loading");
+
+    try {
+      await addDoc(collection(db, "contact_messages"), {
+        name: name.trim(),
+        email: email.trim(),
+        message: message.trim(),
+        createdAt: serverTimestamp(),
+      });
+
+      setName("");
+      setEmail("");
+      setMessage("");
+      setStatus("success");
+    } catch (error) {
+      console.error("Contact message could not be saved:", error);
+      setStatus("error");
+    }
   };
 
   return (
     <div className="page">
-      <div className="page-head" style={{ maxWidth: "760px", margin: "0 auto 28px", textAlign: "center" }}>
+      <div
+        className="page-head"
+        style={{
+          maxWidth: "780px",
+          margin: "0 auto 34px",
+          textAlign: "center",
+        }}
+      >
         <p className="eyebrow">Contact Us</p>
-        <h1>We are here to help</h1>
-        <p className="page-lede">
-          Have a question, suggestion, or feedback about the application?
-          Send us a message using the form below.
+        <h1 style={{ marginBottom: "12px" }}>Get in touch with us</h1>
+        <p
+          className="page-lede"
+          style={{
+            maxWidth: "650px",
+            margin: "0 auto",
+          }}
+        >
+          Have a question, suggestion, or feedback about the Support Ticket
+          Intelligence Platform? Send us a message and we will receive it
+          through the application.
         </p>
       </div>
 
-      <div style={{ maxWidth: "980px", margin: "0 auto", display: "grid", gridTemplateColumns: "0.9fr 1.1fr", gap: "24px", alignItems: "stretch" }}>
-        <section className="panel" style={{ padding: "34px" }}>
-          <p className="eyebrow">Support</p>
-          <h2 style={{ marginTop: "8px", marginBottom: "14px" }}>Support Ticket Intelligence</h2>
-          <p style={{ lineHeight: 1.7 }}>
-            If you have a question or feedback about this web application,
-            you can use the form to contact us.
-          </p>
-          <div style={{ marginTop: "28px", display: "grid", gap: "16px" }}>
-            <div>
-              <strong style={{ display: "block", marginBottom: "4px" }}>Application</strong>
+      <div
+        style={{
+          maxWidth: "1050px",
+          margin: "0 auto",
+          display: "grid",
+          gridTemplateColumns: "0.85fr 1.15fr",
+          gap: "28px",
+          alignItems: "stretch",
+        }}
+      >
+        <section
+          className="panel"
+          style={{
+            padding: "36px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
+          <div>
+            <div
+              style={{
+                width: "52px",
+                height: "52px",
+                borderRadius: "14px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "#f1eafe",
+                color: "#5b21b6",
+                marginBottom: "22px",
+                fontSize: "22px",
+                fontWeight: 700,
+              }}
+            >
+              ✦
+            </div>
+
+            <p className="eyebrow">Support</p>
+            <h2 style={{ marginTop: "8px", marginBottom: "14px" }}>
+              We are here to help
+            </h2>
+            <p style={{ lineHeight: 1.75, marginBottom: "26px" }}>
+              Use this form to share your questions, suggestions, or feedback
+              about the application.
+            </p>
+          </div>
+
+          <div style={{ display: "grid", gap: "14px", marginTop: "24px" }}>
+            <div
+              style={{
+                padding: "15px 16px",
+                borderRadius: "12px",
+                background: "#f8f7fc",
+                border: "1px solid #ece8f5",
+              }}
+            >
+              <strong style={{ display: "block", marginBottom: "5px" }}>
+                Application
+              </strong>
               <span>AI Support Ticket Intelligence Platform</span>
             </div>
-            <div>
-              <strong style={{ display: "block", marginBottom: "4px" }}>Purpose</strong>
+
+            <div
+              style={{
+                padding: "15px 16px",
+                borderRadius: "12px",
+                background: "#f8f7fc",
+                border: "1px solid #ece8f5",
+              }}
+            >
+              <strong style={{ display: "block", marginBottom: "5px" }}>
+                Purpose
+              </strong>
               <span>IT Support Ticket Management</span>
             </div>
           </div>
         </section>
 
-        <form className="panel" onSubmit={handleSubmit} style={{ padding: "34px" }}>
+        <form
+          className="panel"
+          onSubmit={handleSubmit}
+          style={{ padding: "36px" }}
+        >
+          <div style={{ marginBottom: "24px" }}>
+            <h2 style={{ marginBottom: "7px" }}>Send us a message</h2>
+            <p style={{ margin: 0, lineHeight: 1.6 }}>
+              Fill in the details below and submit your message.
+            </p>
+          </div>
+
           <div className="field">
             <label htmlFor="contact-name">Name</label>
-            <input id="contact-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter your name" required />
+            <input
+              id="contact-name"
+              type="text"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+                setStatus("idle");
+              }}
+              placeholder="Enter your name"
+              required
+            />
           </div>
+
           <div className="field">
             <label htmlFor="contact-email">Email</label>
-            <input id="contact-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" required />
+            <input
+              id="contact-email"
+              type="email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setStatus("idle");
+              }}
+              placeholder="Enter your email"
+              required
+            />
           </div>
+
           <div className="field">
             <label htmlFor="contact-message">Message</label>
-            <textarea id="contact-message" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Write your message..." rows={6} required />
+            <textarea
+              id="contact-message"
+              value={message}
+              onChange={(e) => {
+                setMessage(e.target.value);
+                setStatus("idle");
+              }}
+              placeholder="Write your message here..."
+              rows={7}
+              required
+            />
           </div>
-          <button type="submit" className="btn btn-primary btn-block">Send Message</button>
-          {sent && <p style={{ marginTop: "14px", textAlign: "center" }}>Thank you. Your message has been submitted.</p>}
+
+          <button
+            type="submit"
+            className="btn btn-primary btn-block"
+            disabled={status === "loading"}
+          >
+            {status === "loading" ? "Sending..." : "Send Message"}
+          </button>
+
+          {status === "success" && (
+            <div
+              style={{
+                marginTop: "16px",
+                padding: "13px 15px",
+                borderRadius: "10px",
+                background: "#ecfdf5",
+                border: "1px solid #bbf7d0",
+                textAlign: "center",
+              }}
+            >
+              <strong>Message sent successfully.</strong>
+              <p style={{ margin: "4px 0 0" }}>
+                Your message has been saved successfully.
+              </p>
+            </div>
+          )}
+
+          {status === "error" && (
+            <div
+              className="result-error"
+              style={{ marginTop: "16px" }}
+              role="alert"
+            >
+              <strong>Message could not be sent.</strong>
+              <p>Please try again.</p>
+            </div>
+          )}
         </form>
       </div>
     </div>
