@@ -9,6 +9,7 @@ export default function AuthPage() {
   const [mode, setMode] = useState("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
 
@@ -25,7 +26,6 @@ export default function AuthPage() {
       } else {
         await signInWithEmailAndPassword(auth, email.trim(), password);
       }
-
       setStatus("success");
     } catch (err) {
       setError(err.message || "Authentication failed.");
@@ -35,16 +35,24 @@ export default function AuthPage() {
 
   return (
     <div className="auth-shell">
-      <div className="auth-card panel">
-        {/* Platform logo / brand */}
-        <div className="auth-brand">
+      <div
+        className="auth-card panel"
+        style={{
+          maxWidth: "560px",
+          padding: "42px 48px 38px",
+          borderRadius: "22px",
+          boxShadow: "0 18px 45px rgba(63, 38, 110, 0.10)",
+        }}
+      >
+        <div
+          className="auth-brand"
+          style={{
+            justifyContent: "center",
+            marginBottom: "30px",
+          }}
+        >
           <div className="auth-logo" aria-hidden="true">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path
                 d="M5 4.5h9.8L19 8.7v10.8A1.5 1.5 0 0 1 17.5 21h-12A1.5 1.5 0 0 1 4 19.5V6A1.5 1.5 0 0 1 5.5 4.5H5Z"
                 stroke="currentColor"
@@ -68,23 +76,26 @@ export default function AuthPage() {
             </svg>
           </div>
 
-          <div className="brand-text">
-            Support Ticket <strong>Intelligence</strong>
+          <div
+            className="brand-text"
+            style={{
+              fontSize: "1.35rem",
+              fontWeight: 600,
+              letterSpacing: "-0.035em",
+            }}
+          >
+            Support Ticket <strong style={{ fontWeight: 800 }}>Intelligence</strong>
           </div>
         </div>
 
-        {/* Heading */}
-        <div className="page-head auth-head">
-          <p className="eyebrow">
-            {isSignup ? "Get started" : "Welcome back"}
-          </p>
-
+        <div className="page-head auth-head" style={{ textAlign: "center" }}>
           <h1
             style={{
-              fontSize: "2rem",
-              fontWeight: 700,
-              lineHeight: 1.2,
-              marginBottom: "0.55rem",
+              fontSize: "2.45rem",
+              fontWeight: 800,
+              lineHeight: 1.1,
+              letterSpacing: "-0.045em",
+              marginBottom: "0.7rem",
             }}
           >
             {isSignup ? "Create your account" : "Sign in"}
@@ -93,21 +104,21 @@ export default function AuthPage() {
           <p
             className="page-lede"
             style={{
-              marginBottom: "1.5rem",
+              marginBottom: "2rem",
               maxWidth: "420px",
+              marginLeft: "auto",
+              marginRight: "auto",
             }}
           >
             {isSignup
               ? "Create an account to continue."
-              :"Access your support ticket dashboard."}
+              : "Access your support ticket dashboard."}
           </p>
         </div>
 
-        {/* Authentication form */}
         <form onSubmit={handleSubmit}>
           <div className="field">
             <label htmlFor="auth-email">Email</label>
-
             <input
               id="auth-email"
               type="email"
@@ -120,11 +131,38 @@ export default function AuthPage() {
           </div>
 
           <div className="field">
-            <label htmlFor="auth-password">Password</label>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginBottom: "8px",
+              }}
+            >
+              <label htmlFor="auth-password" style={{ marginBottom: 0 }}>
+                Password
+              </label>
+
+              <button
+                type="button"
+                onClick={() => setShowPassword((value) => !value)}
+                style={{
+                  border: "none",
+                  background: "transparent",
+                  padding: 0,
+                  color: "#6336c8",
+                  fontSize: "0.82rem",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                {showPassword ? "Hide password" : "Show password"}
+              </button>
+            </div>
 
             <input
               id="auth-password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
@@ -145,6 +183,12 @@ export default function AuthPage() {
             type="submit"
             className="btn btn-primary btn-block"
             disabled={status === "loading"}
+            style={{
+              marginTop: "8px",
+              minHeight: "48px",
+              fontSize: "0.98rem",
+              fontWeight: 700,
+            }}
           >
             {status === "loading"
               ? "Please wait..."
@@ -154,7 +198,6 @@ export default function AuthPage() {
           </button>
         </form>
 
-        {/* Switch sign-in / sign-up */}
         <button
           type="button"
           className="auth-switch"
@@ -162,7 +205,9 @@ export default function AuthPage() {
             setMode(isSignup ? "signin" : "signup");
             setError("");
             setStatus("idle");
+            setShowPassword(false);
           }}
+          style={{ marginTop: "18px", fontWeight: 600 }}
         >
           {isSignup
             ? "Already have an account? Sign in"
