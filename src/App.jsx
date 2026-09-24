@@ -43,11 +43,10 @@ const CLUSTERS = [
 
 function NavBar({ page, setPage, onLogout }) {
   const links = [
-    { id: "home", label: "Dashboard" },
-    { id: "predict", label: "Predict" },
-    { id: "cluster", label: "Clustering" },
+    { id: "home", label: "Home" },
     { id: "about", label: "About" },
     { id: "history", label: "History" },
+    { id: "contact", label: "Contact Us" },
   ];
   return (
     <header className="navbar">
@@ -55,7 +54,7 @@ function NavBar({ page, setPage, onLogout }) {
         <button
           className="brand"
           onClick={() => setPage("home")}
-          aria-label="Go to dashboard"
+          aria-label="Go to home"
         >
           <span className="brand-mark" aria-hidden="true">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -158,48 +157,6 @@ function HomePage({ setPage }) {
               <span className="preview-label">Prediction</span>
               <span className="preview-result-value">ticket_type</span>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="stat-row">
-        <div className="stat">
-          <span className="stat-value">2</span>
-          <span className="stat-label">ML modules</span>
-        </div>
-        <div className="stat">
-          <span className="stat-value">4</span>
-          <span className="stat-label">Ticket clusters</span>
-        </div>
-        <div className="stat">
-          <span className="stat-value">TF&#8209;IDF</span>
-          <span className="stat-label">Text representation</span>
-        </div>
-        <div className="stat">
-          <span className="stat-value">FastAPI</span>
-          <span className="stat-label">Serving layer</span>
-        </div>
-      </section>
-
-      <section className="pipeline-section">
-        <h2>How a ticket is processed</h2>
-        <div className="pipeline">
-          <div className="pipeline-step">
-            <span className="pipeline-index">1</span>
-            <h4>Title + body combined</h4>
-            <p>Raw ticket text is merged into a single document.</p>
-          </div>
-          <div className="pipeline-connector" />
-          <div className="pipeline-step">
-            <span className="pipeline-index">2</span>
-            <h4>TF-IDF vectorisation</h4>
-            <p>Text is converted into weighted term-frequency vectors.</p>
-          </div>
-          <div className="pipeline-connector" />
-          <div className="pipeline-step">
-            <span className="pipeline-index">3</span>
-            <h4>Model inference</h4>
-            <p>LinearSVC predicts type; K-Means assigns a cluster.</p>
           </div>
         </div>
       </section>
@@ -748,35 +705,29 @@ function AboutPage() {
   return (
     <div className="page about-page">
       <div className="page-head">
-        <p className="eyebrow">Project Overview</p>
-        <h1>About this platform</h1>
+        <p className="eyebrow">About the application</p>
+        <h1>About Support Ticket Intelligence</h1>
         <p className="page-lede">
-          A machine learning based platform for understanding and organizing
-          IT support tickets.
+          A simple web application that helps support teams understand and
+          organize IT support tickets more efficiently.
         </p>
       </div>
 
       <div className="about-hero panel">
         <div>
           <span className="about-kicker">AI Support Ticket Intelligence Platform</span>
-          <h2>Making IT support ticket analysis faster and easier</h2>
+          <h2>Making support ticket handling easier</h2>
           <p>
-            This platform uses Machine Learning and Natural Language Processing
-            to analyse support ticket text, predict ticket type, and group
-            similar tickets based on their content.
+            The application provides a single place to work with support
+            tickets, view ticket type predictions, explore ticket groups, and
+            check previous prediction results.
           </p>
-        </div>
-
-        <div className="about-highlight">
-          <div><strong>2</strong><span>ML Tasks</span></div>
-          <div><strong>4</strong><span>Ticket Clusters</span></div>
-          <div><strong>1</strong><span>Live Prediction API</span></div>
         </div>
       </div>
 
       <div className="about-section-title">
-        <p className="eyebrow">What the platform does</p>
-        <h2>Two Machine Learning tasks</h2>
+        <p className="eyebrow">Application features</p>
+        <h2>What you can do here</h2>
       </div>
 
       <div className="about-feature-grid">
@@ -784,68 +735,99 @@ function AboutPage() {
           <span className="feature-number">01</span>
           <h3>Ticket Type Prediction</h3>
           <p>
-            Predicts whether an incoming IT support ticket is an
-            <strong> Incident </strong>or a<strong> Request </strong>using its title and body.
+            Enter a ticket title and description to get a predicted ticket
+            type such as Incident or Request.
           </p>
-          <span className="feature-tag">Classification • LinearSVC</span>
         </div>
 
         <div className="panel about-feature-card">
           <span className="feature-number">02</span>
-          <h3>Support Ticket Clustering</h3>
+          <h3>Ticket Clustering</h3>
           <p>
-            Groups similar support tickets automatically using their textual
-            content without using a predefined target label.
+            Explore groups of similar support tickets and understand common
+            patterns in the ticket data.
           </p>
-          <span className="feature-tag">Unsupervised • K-Means</span>
+        </div>
+
+        <div className="panel about-feature-card">
+          <span className="feature-number">03</span>
+          <h3>Prediction History</h3>
+          <p>
+            View previous ticket predictions saved for the signed-in user.
+          </p>
+        </div>
+
+        <div className="panel about-feature-card">
+          <span className="feature-number">04</span>
+          <h3>Simple Navigation</h3>
+          <p>
+            Use Home, About, History, and Contact Us to move around the
+            application easily.
+          </p>
         </div>
       </div>
+    </div>
+  );
+}
 
-      <div className="about-grid">
-        <div className="panel">
-          <h3>Industry &amp; domain</h3>
-          <dl className="fact-list">
-            <div><dt>Industry</dt><dd>Customer Support / IT Services</dd></div>
-            <div><dt>Domain</dt><dd>Support Ticket Management</dd></div>
-          </dl>
-        </div>
+function ContactPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [sent, setSent] = useState(false);
 
-        <div className="panel">
-          <h3>ML techniques used</h3>
-          <ul className="bullet-list">
-            <li>TF-IDF text vectorisation of title + body</li>
-            <li>Tuned LinearSVC for ticket type classification</li>
-            <li>K-Means clustering with k = 4</li>
-          </ul>
-        </div>
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setSent(true);
+  };
 
-        <div className="panel">
-          <h3>Technology stack</h3>
-          <div className="tech-pills">
-            <span>Python</span><span>scikit-learn</span><span>TF-IDF</span>
-            <span>LinearSVC</span><span>K-Means</span><span>FastAPI</span>
-            <span>React</span><span>Firebase</span><span>Firestore</span>
-          </div>
-        </div>
-
-        <div className="panel">
-          <h3>Platform workflow</h3>
-          <div className="workflow-list">
-            <div><span>01</span><p>Enter support ticket title and body</p></div>
-            <div><span>02</span><p>Convert ticket text into TF-IDF features</p></div>
-            <div><span>03</span><p>Predict ticket type or identify its cluster</p></div>
-            <div><span>04</span><p>Store prediction history for the logged-in user</p></div>
-          </div>
-        </div>
-      </div>
-
-      <div className="about-final panel">
-        <p className="eyebrow">Project goal</p>
-        <h2>From raw ticket text to useful support insights</h2>
-        <p>
-          The goal is to reduce manual effort in ticket analysis and help
-          support teams understand incoming requests more quickly.
+  return (
+    <div className="page">
+      <div className="page-head" style={{ maxWidth: "760px", margin: "0 auto 28px", textAlign: "center" }}>
+        <p className="eyebrow">Contact Us</p>
+        <h1>We are here to help</h1>
+        <p className="page-lede">
+          Have a question, suggestion, or feedback about the application?
+          Send us a message using the form below.
         </p>
+      </div>
+
+      <div style={{ maxWidth: "980px", margin: "0 auto", display: "grid", gridTemplateColumns: "0.9fr 1.1fr", gap: "24px", alignItems: "stretch" }}>
+        <section className="panel" style={{ padding: "34px" }}>
+          <p className="eyebrow">Support</p>
+          <h2 style={{ marginTop: "8px", marginBottom: "14px" }}>Support Ticket Intelligence</h2>
+          <p style={{ lineHeight: 1.7 }}>
+            If you have a question or feedback about this web application,
+            you can use the form to contact us.
+          </p>
+          <div style={{ marginTop: "28px", display: "grid", gap: "16px" }}>
+            <div>
+              <strong style={{ display: "block", marginBottom: "4px" }}>Application</strong>
+              <span>AI Support Ticket Intelligence Platform</span>
+            </div>
+            <div>
+              <strong style={{ display: "block", marginBottom: "4px" }}>Purpose</strong>
+              <span>IT Support Ticket Management</span>
+            </div>
+          </div>
+        </section>
+
+        <form className="panel" onSubmit={handleSubmit} style={{ padding: "34px" }}>
+          <div className="field">
+            <label htmlFor="contact-name">Name</label>
+            <input id="contact-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter your name" required />
+          </div>
+          <div className="field">
+            <label htmlFor="contact-email">Email</label>
+            <input id="contact-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" required />
+          </div>
+          <div className="field">
+            <label htmlFor="contact-message">Message</label>
+            <textarea id="contact-message" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Write your message..." rows={6} required />
+          </div>
+          <button type="submit" className="btn btn-primary btn-block">Send Message</button>
+          {sent && <p style={{ marginTop: "14px", textAlign: "center" }}>Thank you. Your message has been submitted.</p>}
+        </form>
       </div>
     </div>
   );
@@ -901,6 +883,7 @@ export default function App() {
         {page === "cluster" && <ClusterPage />}
         {page === "history" && <HistoryPage />}
         {page === "about" && <AboutPage />}
+        {page === "contact" && <ContactPage />}
       </main>
       <footer className="app-footer">
         <p>AI Support Ticket Intelligence Platform &mdash; Student ML Project</p>
